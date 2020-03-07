@@ -14,6 +14,8 @@ const D3Container = ({ data }) => {
           .attr('x', 25)
           .attr('y', (d, i) => i * 30)
           .style('font-size', 18)
+          .text((d) => d),
+        (update) => update
           .text((d) => d)
       );
   }, [data]);
