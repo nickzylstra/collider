@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import Enemy from './Enemy';
 
 
-const Enemies = ({ height, width, enemyCount, playerRef }) => {
+const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
   const enemiesContainer = useRef(null);
   const enemySize = 8;
 
@@ -13,24 +13,37 @@ const Enemies = ({ height, width, enemyCount, playerRef }) => {
       const svgG = d3.select(enemiesContainer.current);
       const moveTrans = svgG.transition().duration(2000).ease(d3.easePolyInOut)
 
-      function checkCollision(endData, i) {
-        const enemy = d3.select(this);
-        const {e, f} = this.transform.baseVal.consolidate().matrix
-        const [x , y] = [e, f];
-        debugger;
-        const [endX, endY] = [Math.random() * width, Math.random() * height];
-        const interX = d3.interpolateNumber(x, endX);
-        const interY = d3.interpolateNumber(y, endY);
+      function getXY(selection) {
+        const {e, f} = selection.transform.baseVal.consolidate().matrix;
+        return [e, f];
+      }
 
+      function checkCollision(enemyX, enemyY) {
+        const [playerX, playerY] = getXY(playerRef.current);
+        if (Math.abs(enemyX - playerX) < enemySize && Math.abs(enemyY - playerY)) {
+          console.log('COLLISION!');
+          // TODO
+          // d3.select(gameRef).style('background-color', 'red')
+        } 
+      }
+
+      function moveEnemy(endData, i) {
+        const [startX , startY] = getXY(this);
+        const [endX, endY] = [Math.random() * width, Math.random() * height];
+        const interXofT = d3.interpolateNumber(startX, endX);
+        const interYofT = d3.interpolateNumber(startY, endY);
+        
+        const enemy = d3.select(this);
         return (t) => {
-          // TODO - check collision
-          enemy.attr('transform', `translate(${interX(t)} ${interY(t)})`)
+          const [curX, curY] = [interXofT(t), interYofT(t)];
+          checkCollision(curX, curY);
+          enemy.attr('transform', `translate(${curX} ${curY})`);
         };
       }
   
       svgG.selectAll('.Enemy')
         .transition(moveTrans)
-        .tween('checkCollision', checkCollision);
+        .tween('moveEnemy', moveEnemy);
       
       timer = setTimeout(moveEnemies, 2000);
     }())
