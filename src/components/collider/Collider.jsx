@@ -6,24 +6,42 @@ const Collider = () => {
   const width = 600;
   const height = 400;
   const enemyCount = 20;
+  const enemyContainer = useRef(null);
 
-
-  const gameContainer = useRef(null);
+  useEffect(() => {
+    let timer;
+    (function moveEnemies() {
+      const svgG = d3.select(enemyContainer.current);
+      const move = svgG.transition().duration(1000);
+  
+      svgG.selectAll('.Enemy')
+        .transition(move)
+        .attr('transform', () => `translate(${Math.random() * width} ${Math.random() * height})`);
+      
+      setTimeout(moveEnemies, 2000);
+    }())
+  
+    return () => { clearTimeout(timer); }
+  });
 
   return (
     <div className="Collider">
       Collider
       <svg
-        ref={gameContainer}
         className="game-container"
         width={width}
         height={height}
       >
-        {Array(enemyCount).fill().map((el, idx) => {
-          const x = Math.floor(Math.random() * width);
-          const y = Math.floor(Math.random() * height);
-          return <Enemy x={x} y={y} number={idx} size={10} />
-        })}
+        <g
+          className="Enemies"
+          ref={enemyContainer}
+        >
+          {Array(enemyCount).fill().map((el, idx) => {
+            const x = Math.floor(Math.random() * width);
+            const y = Math.floor(Math.random() * height);
+            return <Enemy key={idx} x={x} y={y} number={idx} size={8} />
+          })}
+        </g>
       </svg>
     </div>
   )

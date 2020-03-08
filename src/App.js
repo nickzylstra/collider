@@ -1,5 +1,5 @@
 import React from 'react';
-import NumberShifter from './components/NumberShifter';
+// import NumberShifter from './components/NumberShifter';
 import Collider from './components/collider/Collider';
 import './App.css';
 
