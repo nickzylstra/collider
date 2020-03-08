@@ -19,10 +19,10 @@ const Collider = () => {
         width={width}
         height={height}
       >
-        {Array(enemyCount).fill().map(() => {
+        {Array(enemyCount).fill().map((el, idx) => {
           const x = Math.floor(Math.random() * width);
           const y = Math.floor(Math.random() * height);
-          return <Enemy x={x} y={y} size={10} />
+          return <Enemy x={x} y={y} number={idx} size={10} />
         })}
       </svg>
     </div>

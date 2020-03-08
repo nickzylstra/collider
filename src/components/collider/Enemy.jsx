@@ -1,7 +1,8 @@
 import React from 'react';
 
 
-const Enemy = ({ x, y, size }) => {
+const Enemy = ({ x, y, size, number }) => {
+  const animeTime = Math.max(number / 5, 1);
   return (
     <g
       id="R1"
@@ -14,13 +15,13 @@ const Enemy = ({ x, y, size }) => {
       >
         <animate
           attributeName="ry"
-          dur="3s"
+          dur={`${animeTime}s`}
           values={`${size}; ${size * 3}; ${size}`}
           repeatCount="indefinite"
         />
         <animate
           attributeName="rx"
-          dur="3s"
+          dur={`${animeTime}s`}
           values={`${size * 3}; ${size}; ${size * 3}`}
           repeatCount="indefinite"
         />
