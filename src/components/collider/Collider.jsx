@@ -12,7 +12,7 @@ const Collider = () => {
     let timer;
     (function moveEnemies() {
       const svgG = d3.select(enemyContainer.current);
-      const move = svgG.transition().duration(1000);
+      const move = svgG.transition().duration(2000).ease(d3.easePolyInOut)
   
       svgG.selectAll('.Enemy')
         .transition(move)
