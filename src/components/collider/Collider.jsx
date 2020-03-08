@@ -1,29 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import * as d3 from 'd3';
-import Enemy from './Enemy';
+import Enemies from './Enemies';
 
 const Collider = () => {
   const width = 600;
   const height = 400;
   const enemyCount = 20;
-  const enemySize = 8;
-  const enemyContainer = useRef(null);
 
-  useEffect(() => {
-    let timer;
-    (function moveEnemies() {
-      const svgG = d3.select(enemyContainer.current);
-      const move = svgG.transition().duration(2000).ease(d3.easePolyInOut)
-  
-      svgG.selectAll('.Enemy')
-        .transition(move)
-        .attr('transform', () => `translate(${Math.random() * width} ${Math.random() * height})`);
-      
-      timer = setTimeout(moveEnemies, 2000);
-    }())
-  
-    return () => { clearTimeout(timer); }
-  });
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+
 
   return (
     <div className="Collider">
@@ -34,16 +19,11 @@ const Collider = () => {
         height={height}
         style={{ 'backgroundColor': 'black' }}
       >
-        <g
-          className="Enemies"
-          ref={enemyContainer}
-        >
-          {Array(enemyCount).fill().map((el, idx) => {
-            const x = Math.floor(Math.random() * width);
-            const y = Math.floor(Math.random() * height);
-            return <Enemy key={idx} x={x} y={y} number={idx} size={enemySize} />
-          })}
-        </g>
+        <Enemies
+          width={width}
+          height={height}
+          enemyCount={enemyCount}
+        />
       </svg>
     </div>
   )
