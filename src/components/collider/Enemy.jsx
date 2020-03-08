@@ -1,16 +1,14 @@
 import React from 'react';
 
 
-const Enemy = ({ x, y, size, number }) => {
+const Enemy = ({ size, number }) => {
   const animeTime = Math.max(number / 5, 1);
   return (
     <ellipse
-      className="Enemy"
       rx="0"
       ry="0"
       opacity=".3"
       fill="white"
-      transform={`translate(${x} ${y})`}
     >
       <animate
         attributeName="ry"

@@ -12,13 +12,15 @@ const Collider = () => {
   const enemyCount = 20;
 
   useEffect(() => {
-    const body = d3.select('body');
     const player = d3.select(playerRef.current);
+    const body = d3.select('body');
+
     body.on('mousemove', function listen() {
       const [x, y] = d3.mouse(gameContainer.current)
         .map((c, i) => Math.max(0, Math.min(c, !i ? width : height)));
       player.attr('transform', () => `translate(${x} ${y})`);
     });
+
     return () => body.on('mousemove', null);
   });
 
@@ -29,13 +31,14 @@ const Collider = () => {
       </div>
       <svg
         ref={gameContainer}
-        className="game-container"
+        className="gameContainer"
         width={width}
         height={height}
         style={{ 'backgroundColor': 'black' }}
       >
         <Player playerRef={playerRef} />
         <Enemies
+          playerRef={playerRef}
           width={width}
           height={height}
           enemyCount={enemyCount}
