@@ -5,7 +5,8 @@ import Enemy from './Enemy';
 
 const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
   const enemiesContainer = useRef(null);
-  const enemySize = 8;
+  const enemySize = 24;
+
 
   useEffect(function startEnemyMovement() {
     let timer;
@@ -18,13 +19,25 @@ const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
         return [e, f];
       }
 
-      function checkCollision(enemyX, enemyY) {
-        const [playerX, playerY] = getXY(playerRef.current);
-        if (Math.abs(enemyX - playerX) < enemySize && Math.abs(enemyY - playerY)) {
-          console.log('COLLISION!');
-          // TODO
-          // d3.select(gameRef).style('background-color', 'red')
-        } 
+      function checkCollision(playerEl, enemy, enemyX, enemyY, enemySize) {
+        const distance = (function getDistance(p1, p2) {
+          const dx = p1[0] - p2[0];
+          const dy = p1[1] - p2[1];
+          return Math.sqrt(Math.pow(dx,2) + Math.pow(dy, 2));
+        }(getXY(playerEl), [enemyX, enemyY]));
+
+        const isCollision = distance < enemySize;
+        return isCollision;
+      }
+
+      function updateEnemyCollisionStatus(enemy, isCollision) {
+        if (isCollision) {
+          enemy.classed('colliding', true);
+        } else if (enemy.classed('colliding')) {
+          enemy.classed('colliding', false);
+          enemy.classed('recentlyCollided', true);
+          setTimeout(() => enemy.classed('recentlyCollided', false), 500);
+        }
       }
 
       function moveEnemy(endData, i) {
@@ -36,7 +49,8 @@ const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
         const enemy = d3.select(this);
         return (t) => {
           const [curX, curY] = [interXofT(t), interYofT(t)];
-          checkCollision(curX, curY);
+          const isCollision = checkCollision(playerRef.current, enemy, curX, curY, enemySize);
+          updateEnemyCollisionStatus(enemy, isCollision);
           enemy.attr('transform', `translate(${curX} ${curY})`);
         };
       }
@@ -49,7 +63,7 @@ const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
     }())
   
     return () => { clearTimeout(timer); }
-  }, [height, width]);
+  }, [height, width, playerRef]);
 
   return (
     <g
@@ -59,13 +73,7 @@ const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
       {Array(enemyCount).fill().map((el, idx) => {
         const x = Math.random() * width;
         const y = Math.random() * height;
-        return (
-          <g key={idx} className="Enemy" transform={`translate(${x} ${y})`}>
-            {Array(10).fill().map((el, idx) => (
-              <Enemy key={idx} number={idx * 2} size={enemySize} />
-            ))}
-          </g>
-        );
+        return (<Enemy key={idx} number={idx} x={x} y={y} size={enemySize} />);
       })}
     </g>
   );

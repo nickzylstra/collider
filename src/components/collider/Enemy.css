@@ -1,0 +1,11 @@
+.Enemy {
+  fill: white;
+}
+
+.colliding {
+  fill: red;
+}
+
+.recentlyCollided {
+  fill: yellow;
+}

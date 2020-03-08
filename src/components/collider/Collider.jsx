@@ -11,7 +11,7 @@ const Collider = () => {
   const padding = '20px';
   const enemyCount = 20;
 
-  useEffect(function addMouseListener() {
+  useEffect(function trackMouseMovement() {
     const player = d3.select(playerRef.current);
     const body = d3.select('body');
 
@@ -39,6 +39,7 @@ const Collider = () => {
         <Player playerRef={playerRef} />
         <Enemies
           playerRef={playerRef}
+          gameRef={gameContainer}
           width={width}
           height={height}
           enemyCount={enemyCount}
