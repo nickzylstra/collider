@@ -4,30 +4,33 @@ import './App.css';
 
 const D3Container = ({ data }) => {
   const d3Container = useRef(null);
+  const width = 60;
+
 
   useEffect(() => {
     const svg = d3.select(d3Container.current);
     const trans = svg.transition().duration(1200);
 
+
     svg.selectAll("text")
       .data(data, (d) => d)
       .join(
         (enter) => enter.append("text")
-            .attr('fill', 'green')
-            .attr('x', -20)
-            .attr('y', (d, i) => i * 20 + 30)
-            .style('font-size', 18)
+            .attr('fill', 'blue')
+            .attr('x', -width)
+            .attr('y', (d, i) => i * 50 + 50)
+            .style('font-size', 50)
             .text((d) => d)
           .call((enter) => enter.transition(trans)
             .attr('x', 0)),
         (update) => update
-            .attr('fill', 'blue')
+            .attr('fill', 'black')
           .call((update) => update.transition(trans)
-            .attr('y', (d, i) => i * 20 + 30)),
+            .attr('y', (d, i) => i * 50 + 50)),
         (exit) => exit
-            .attr('fill', 'gray')
+            .attr('fill', 'red')
           .call((exit) => exit.transition(trans)
-            .attr('x', 20)
+            .attr('x', width)
             .remove())
       );
   }, [data]);
@@ -35,8 +38,8 @@ const D3Container = ({ data }) => {
   return (
     <svg
       className="d3-component"
-      width={20}
-      height={430}
+      width={width}
+      height={1200}
       ref={d3Container}
     />
   );
