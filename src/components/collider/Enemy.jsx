@@ -21,7 +21,7 @@ const Enemy = ({ x, y, size }) => {
         <animate
           attributeName="rx"
           dur="3s"
-          values={`${size}; ${size * 3}; ${size}`}
+          values={`${size * 3}; ${size}; ${size * 3}`}
           repeatCount="indefinite"
         />
       </ellipse>
