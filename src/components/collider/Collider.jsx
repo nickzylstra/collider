@@ -6,6 +6,7 @@ const Collider = () => {
   const width = 600;
   const height = 400;
   const enemyCount = 20;
+  const enemySize = 8;
   const enemyContainer = useRef(null);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const Collider = () => {
         .transition(move)
         .attr('transform', () => `translate(${Math.random() * width} ${Math.random() * height})`);
       
-      setTimeout(moveEnemies, 2000);
+      timer = setTimeout(moveEnemies, 2000);
     }())
   
     return () => { clearTimeout(timer); }
@@ -31,6 +32,7 @@ const Collider = () => {
         className="game-container"
         width={width}
         height={height}
+        style={{ 'backgroundColor': 'black' }}
       >
         <g
           className="Enemies"
@@ -39,7 +41,7 @@ const Collider = () => {
           {Array(enemyCount).fill().map((el, idx) => {
             const x = Math.floor(Math.random() * width);
             const y = Math.floor(Math.random() * height);
-            return <Enemy key={idx} x={x} y={y} number={idx} size={8} />
+            return <Enemy key={idx} x={x} y={y} number={idx} size={enemySize} />
           })}
         </g>
       </svg>
