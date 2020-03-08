@@ -7,38 +7,54 @@ const D3Container = ({ data }) => {
 
   useEffect(() => {
     const svg = d3.select(d3Container.current);
+    const trans = svg.transition().duration(1200);
+
     svg.selectAll("text")
-      .data(data)
+      .data(data, (d) => d)
       .join(
         (enter) => enter.append("text")
-          .attr('x', 25)
-          .attr('y', (d, i) => i * 30)
-          .style('font-size', 18)
-          .text((d) => d),
+            .attr('fill', 'green')
+            .attr('x', -20)
+            .attr('y', (d, i) => i * 20 + 30)
+            .style('font-size', 18)
+            .text((d) => d)
+          .call((enter) => enter.transition(trans)
+            .attr('x', 0)),
         (update) => update
-          .text((d) => d)
+            .attr('fill', 'blue')
+          .call((update) => update.transition(trans)
+            .attr('y', (d, i) => i * 20 + 30)),
+        (exit) => exit
+            .attr('fill', 'gray')
+          .call((exit) => exit.transition(trans)
+            .attr('x', 20)
+            .remove())
       );
   }, [data]);
 
   return (
     <svg
       className="d3-component"
-      width={40}
-      height={400}
+      width={20}
+      height={430}
       ref={d3Container}
     />
   );
 };
 
 function App() {
-  const pointCount = 10;
-  const genData = () => Array(pointCount).fill().map(() => Math.floor(Math.random() * pointCount));
-  const [data, setData] = useState(genData);
+  const numberCount = 20;
+  const genNumbers = () => {
+    const numbers = Array(numberCount).fill().map((e, i) => i);
+    const shuffledNumbers = d3.shuffle(numbers).slice(0, Math.floor(Math.random() * numberCount)).sort((a,b) => a - b);
+    return shuffledNumbers;
+  } 
+  const [data, setData] = useState(genNumbers);
 
   useEffect(() => {
     const refreshInterval = setInterval(() => {
-      setData(genData())
-    }, 2000);
+      setData(genNumbers())
+    }, 2500);
 
     return () => {
       clearInterval(refreshInterval);
