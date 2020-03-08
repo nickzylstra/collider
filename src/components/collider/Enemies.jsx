@@ -7,21 +7,36 @@ const Enemies = ({ height, width, enemyCount, playerRef }) => {
   const enemiesContainer = useRef(null);
   const enemySize = 8;
 
-  useEffect(() => {
+  useEffect(function startEnemyMovement() {
     let timer;
     (function moveEnemies() {
       const svgG = d3.select(enemiesContainer.current);
-      const move = svgG.transition().duration(2000).ease(d3.easePolyInOut)
+      const moveTrans = svgG.transition().duration(2000).ease(d3.easePolyInOut)
+
+      function checkCollision(endData, i) {
+        const enemy = d3.select(this);
+        const {e, f} = this.transform.baseVal.consolidate().matrix
+        const [x , y] = [e, f];
+        debugger;
+        const [endX, endY] = [Math.random() * width, Math.random() * height];
+        const interX = d3.interpolateNumber(x, endX);
+        const interY = d3.interpolateNumber(y, endY);
+
+        return (t) => {
+          // TODO - check collision
+          enemy.attr('transform', `translate(${interX(t)} ${interY(t)})`)
+        };
+      }
   
       svgG.selectAll('.Enemy')
-        .transition(move)
-        .attr('transform', () => `translate(${Math.random() * width} ${Math.random() * height})`);
+        .transition(moveTrans)
+        .tween('checkCollision', checkCollision);
       
       timer = setTimeout(moveEnemies, 2000);
     }())
   
     return () => { clearTimeout(timer); }
-  });
+  }, [height, width]);
 
   return (
     <g
@@ -34,7 +49,7 @@ const Enemies = ({ height, width, enemyCount, playerRef }) => {
         return (
           <g key={idx} className="Enemy" transform={`translate(${x} ${y})`}>
             {Array(10).fill().map((el, idx) => (
-              <Enemy key={idx} x={x} y={y} number={idx * 2} size={enemySize} />
+              <Enemy key={idx} number={idx * 2} size={enemySize} />
             ))}
           </g>
         );

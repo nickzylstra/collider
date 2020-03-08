@@ -11,18 +11,18 @@ const Collider = () => {
   const padding = '20px';
   const enemyCount = 20;
 
-  useEffect(() => {
+  useEffect(function addMouseListener() {
     const player = d3.select(playerRef.current);
     const body = d3.select('body');
 
-    body.on('mousemove', function listen() {
+    body.on('mousemove', () => {
       const [x, y] = d3.mouse(gameContainer.current)
         .map((c, i) => Math.max(0, Math.min(c, !i ? width : height)));
       player.attr('transform', () => `translate(${x} ${y})`);
     });
 
     return () => body.on('mousemove', null);
-  });
+  }, []);
 
   return (
     <div className="Collider" style={{ padding }}>
