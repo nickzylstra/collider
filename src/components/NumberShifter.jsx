@@ -4,8 +4,8 @@ import * as d3 from 'd3';
 
 const D3Container = ({ data }) => {
   const d3Container = useRef(null);
-  const width = 60;
-  const height = 50;
+  const width = 35;
+  const height = 30;
 
   useEffect(() => {
     const svg = d3.select(d3Container.current);
