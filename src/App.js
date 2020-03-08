@@ -5,7 +5,7 @@ import './App.css';
 const D3Container = ({ data }) => {
   const d3Container = useRef(null);
   const width = 60;
-
+  const height = 50;
 
   useEffect(() => {
     const svg = d3.select(d3Container.current);
@@ -18,15 +18,15 @@ const D3Container = ({ data }) => {
         (enter) => enter.append("text")
             .attr('fill', 'blue')
             .attr('x', -width)
-            .attr('y', (d, i) => i * 50 + 50)
-            .style('font-size', 50)
+            .attr('y', (d, i) => i * height + height)
+            .style('font-size', height)
             .text((d) => d)
           .call((enter) => enter.transition(trans)
             .attr('x', 0)),
         (update) => update
             .attr('fill', 'black')
           .call((update) => update.transition(trans)
-            .attr('y', (d, i) => i * 50 + 50)),
+            .attr('y', (d, i) => i * height + height)),
         (exit) => exit
             .attr('fill', 'red')
           .call((exit) => exit.transition(trans)
@@ -39,7 +39,7 @@ const D3Container = ({ data }) => {
     <svg
       className="d3-component"
       width={width}
-      height={1200}
+      height={height * 20}
       ref={d3Container}
     />
   );
