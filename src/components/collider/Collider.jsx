@@ -12,7 +12,7 @@ const Collider = () => {
   const width = 600;
   const height = 400;
   const padding = '20px';
-  const enemyCount = 20;
+  const enemyCount = 30;
 
   useEffect(function trackMouseMovement() {
     const player = d3.select(playerRef.current);

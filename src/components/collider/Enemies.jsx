@@ -11,15 +11,12 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
   useEffect(function startEnemyMovement() {
     let timer;
     (function moveEnemies() {
-      const svgG = d3.select(enemiesContainer.current);
-      const moveTrans = svgG.transition().duration(2000).ease(d3.easePolyInOut)
-
       function getXY(selection) {
         const {e, f} = selection.transform.baseVal.consolidate().matrix;
         return [e, f];
       }
 
-      function checkCollision(playerEl, enemy, enemyX, enemyY, enemySize) {
+      function checkCollision(playerEl, enemyX, enemyY, enemySize) {
         const distance = (function getDistance(p1, p2) {
           const dx = p1[0] - p2[0];
           const dy = p1[1] - p2[1];
@@ -41,7 +38,7 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
         }
       }
 
-      function moveEnemy(endData, i) {
+      function moveEnemy() {
         const [startX , startY] = getXY(this);
         const [endX, endY] = [Math.random() * width, Math.random() * height];
         const interXofT = d3.interpolateNumber(startX, endX);
@@ -50,14 +47,14 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
         const enemy = d3.select(this);
         return (t) => {
           const [curX, curY] = [interXofT(t), interYofT(t)];
-          const isCollision = checkCollision(playerRef.current, enemy, curX, curY, enemySize);
+          const isCollision = checkCollision(playerRef.current, curX, curY, enemySize);
           updateEnemyCollisionStatus(enemy, isCollision);
           enemy.attr('transform', `translate(${curX} ${curY})`);
         };
       }
   
-      svgG.selectAll('.Enemy')
-        .transition(moveTrans)
+      d3.select(enemiesContainer.current).selectAll('.Enemy')
+        .transition().duration(2000).ease(d3.easePolyInOut)
         .tween('moveEnemy', moveEnemy);
       
       timer = d3.timeout(moveEnemies, 2000);
