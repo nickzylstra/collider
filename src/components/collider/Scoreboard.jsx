@@ -27,7 +27,7 @@ const Scoreboard = ({ eventEmitter }) => {
     }())
 
     return function stopScoreUpdating() { timer.stop(); };
-  }, []);
+  }, [eventEmitter]);
 
   return (
     <g className="Scoreboard">

@@ -64,7 +64,7 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
     }())
   
     return () => { timer.stop(); }
-  }, [height, width, playerRef]);
+  }, [height, width, playerRef, eventEmitter]);
 
   return (
     <g

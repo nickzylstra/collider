@@ -4,6 +4,8 @@ import Enemies from './Enemies';
 import Player from './Player';
 import Scoreboard from './Scoreboard';
 
+const eventEmitter = d3.dispatch('collision');
+
 const Collider = () => {
   const gameContainer = useRef(null);
   const playerRef = useRef(null);
@@ -11,7 +13,6 @@ const Collider = () => {
   const height = 400;
   const padding = '20px';
   const enemyCount = 20;
-  const eventEmitter = d3.dispatch('collision');
 
   useEffect(function trackMouseMovement() {
     const player = d3.select(playerRef.current);
