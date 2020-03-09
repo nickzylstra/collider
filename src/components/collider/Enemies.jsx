@@ -39,8 +39,9 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
       }
 
       function moveEnemy() {
+        const f = 1.1;
         const [startX , startY] = getXY(this);
-        const [endX, endY] = [Math.random() * width, Math.random() * height];
+        const [endX, endY] = [Math.random() * width * f - width * (f - 1) / 2, Math.random() * height * f - height * (f - 1) / 2];
         const interXofT = d3.interpolateNumber(startX, endX);
         const interYofT = d3.interpolateNumber(startY, endY);
         
@@ -54,10 +55,10 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
       }
   
       d3.select(enemiesContainer.current).selectAll('.Enemy')
-        .transition().duration(2000).ease(d3.easePolyInOut)
+        .transition().duration(2500).ease(d3.easePolyInOut)
         .tween('moveEnemy', moveEnemy);
       
-      timer = d3.timeout(moveEnemies, 2000);
+      timer = d3.timeout(moveEnemies, 2500);
     }())
   
     return () => { timer.stop(); }
