@@ -11,12 +11,13 @@ const Collider = () => {
   const height = 400;
   const padding = '20px';
   const enemyCount = 20;
+  const eventEmitter = d3.dispatch('collision');
 
   useEffect(function trackMouseMovement() {
     const player = d3.select(playerRef.current);
     const body = d3.select('body');
 
-    body.on('mousemove', () => {
+    body.on('mousemove', function updatePlayerPos() {
       const [x, y] = d3.mouse(gameContainer.current)
         .map((c, i) => Math.max(0, Math.min(c, !i ? width : height)));
       player.attr('transform', () => `translate(${x} ${y})`);
@@ -37,7 +38,7 @@ const Collider = () => {
         height={height}
         style={{ 'backgroundColor': 'black' }}
       >
-        <Scoreboard />
+        <Scoreboard eventEmitter={eventEmitter}/>
         <Player playerRef={playerRef} />
         <Enemies
           playerRef={playerRef}
@@ -45,6 +46,7 @@ const Collider = () => {
           width={width}
           height={height}
           enemyCount={enemyCount}
+          eventEmitter={eventEmitter}
         />
       </svg>
     </div>

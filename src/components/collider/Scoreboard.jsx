@@ -3,23 +3,30 @@ import * as d3 from 'd3';
 import './Scoreboard.css'
 
 
-const Scoreboard = () => {
+const Scoreboard = ({ eventEmitter }) => {
   const highScoreRef = useRef(null);
   const currentScoreRef = useRef(null);
 
   useEffect(() => {
     let timer;
-    (function updateScore() {
-      timer = d3.timer((elapsed) => {
-        const highScoreSel = d3.select(highScoreRef.current);
+    const highScoreSel = d3.select(highScoreRef.current);
+    const currentScoreSel = d3.select(currentScoreRef.current);
+
+    (function startScoreUpdating() {
+      function startTimer(elapsed) {
         const highScore = parseInt(highScoreSel.text(), 10);
         const currentScore = Math.floor(elapsed / 10) / 100;
         if (currentScore > highScore) highScoreSel.text(currentScore);
-        d3.select(currentScoreRef.current).text(currentScore);
+        currentScoreSel.text(currentScore);
+      }
+      timer = d3.timer(startTimer);
+      eventEmitter.on('collision', () => {
+        currentScoreSel.text(0);
+        timer.restart(startTimer);
       });
     }())
 
-    return () => { timer.stop(); };
+    return function stopScoreUpdating() { timer.stop(); };
   }, []);
 
   return (

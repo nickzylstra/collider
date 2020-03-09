@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import Enemy from './Enemy';
 
 
-const Enemies = ({ height, width, enemyCount, playerRef }) => {
+const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
   const enemiesContainer = useRef(null);
   const enemySize = 24;
 
@@ -33,6 +33,7 @@ const Enemies = ({ height, width, enemyCount, playerRef }) => {
       function updateEnemyCollisionStatus(enemy, isCollision) {
         if (isCollision) {
           enemy.classed('colliding', true);
+          eventEmitter.call('collision');
         } else if (enemy.classed('colliding')) {
           enemy.classed('colliding', false);
           enemy.classed('recentlyCollided', true);
