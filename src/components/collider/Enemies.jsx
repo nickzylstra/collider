@@ -3,11 +3,10 @@ import * as d3 from 'd3';
 import Enemy from './Enemy';
 
 
-const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
+const Enemies = ({ height, width, options, playerRef, eventEmitter }) => {
   const enemiesContainer = useRef(null);
-  const enemySize = 24;
-
-
+  const { enemyCount, enemySize, enemyInterval } = options;
+  
   useEffect(function startEnemyMovement() {
     let timer;
     (function moveEnemies() {
@@ -55,14 +54,14 @@ const Enemies = ({ height, width, enemyCount, playerRef, eventEmitter }) => {
       }
   
       d3.select(enemiesContainer.current).selectAll('.Enemy')
-        .transition().duration(2500).ease(d3.easePolyInOut)
+        .transition().duration(enemyInterval).ease(d3.easePolyInOut)
         .tween('moveEnemy', moveEnemy);
       
-      timer = d3.timeout(moveEnemies, 2500);
+      timer = d3.timeout(moveEnemies, enemyInterval);
     }())
   
     return () => { timer.stop(); }
-  }, [height, width, playerRef, eventEmitter]);
+  }, [height, width, playerRef, enemySize, enemyInterval, eventEmitter]);
 
   return (
     <g

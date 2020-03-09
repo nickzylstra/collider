@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import Enemies from './Enemies';
 import Player from './Player';
@@ -12,7 +12,19 @@ const Collider = () => {
   const width = 600;
   const height = 400;
   const padding = '20px';
-  const enemyCount = 25;
+  const enemyCountInit = 25;
+  const enemySizeInit = 24;
+  const enemyIntervalInit = 2500;
+
+
+  const [enemyCount, setEnemyCount] = useState(enemyCountInit);
+  const onEnemyCountChange = (e) => setEnemyCount(parseInt(e.target.value || 0, 10));
+
+  const [enemySize, setEnemySize] = useState(enemySizeInit);
+  const onEnemySizeChange = (e) => setEnemySize(parseInt(e.target.value || 0, 10));
+
+  const [enemyInterval, setEnemyInterval] = useState(enemyIntervalInit);
+  const onEnemyIntervalChange = (e) => setEnemyInterval(parseInt(e.target.value || 1, 10));
 
   useEffect(function trackMouseMovement() {
     const player = d3.select(playerRef.current);
@@ -27,8 +39,27 @@ const Collider = () => {
     return () => body.on('mousemove', null);
   }, []);
 
+  const options = { enemyCount, enemySize, enemyInterval };
   return (
     <div className="Collider" style={{ padding }}>
+      <div>
+        <label>
+          Count:
+          <input onChange={onEnemyCountChange} value={enemyCount} />
+        </label>
+        <label>
+          Size:
+          <input onChange={onEnemySizeChange} value={enemySize} />
+        </label>
+        <label>
+          Speed:
+          <select onChange={onEnemyIntervalChange} value={enemyInterval}>
+            <option value={enemyIntervalInit / 2}>Fast</option>
+            <option value={enemyIntervalInit}>Normal</option>
+            <option value={enemyIntervalInit * 2}>Slow</option>
+          </select>
+        </label>
+      </div>
       <svg
         ref={gameContainer}
         className="gameContainer"
@@ -39,14 +70,14 @@ const Collider = () => {
         <text x={width - 65} y = "18" fill="white">
           Collider
         </text>
-        <Scoreboard eventEmitter={eventEmitter}/>
+        <Scoreboard eventEmitter={eventEmitter} key={[enemyCount, enemySize]}/>
         <Player playerRef={playerRef} />
         <Enemies
           playerRef={playerRef}
           gameRef={gameContainer}
           width={width}
           height={height}
-          enemyCount={enemyCount}
+          options={options}
           eventEmitter={eventEmitter}
         />
       </svg>
