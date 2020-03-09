@@ -29,9 +29,6 @@ const Collider = () => {
 
   return (
     <div className="Collider" style={{ padding }}>
-      <div>
-        Collider
-      </div>
       <svg
         ref={gameContainer}
         className="gameContainer"
@@ -39,6 +36,9 @@ const Collider = () => {
         height={height}
         style={{ 'backgroundColor': 'black' }}
       >
+        <text x={width - 65} y = "18" fill="white">
+          Collider
+        </text>
         <Scoreboard eventEmitter={eventEmitter}/>
         <Player playerRef={playerRef} />
         <Enemies
