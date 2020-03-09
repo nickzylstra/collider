@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import Enemies from './Enemies';
 import Player from './Player';
+import Scoreboard from './Scoreboard';
 
 const Collider = () => {
   const gameContainer = useRef(null);
@@ -36,6 +37,7 @@ const Collider = () => {
         height={height}
         style={{ 'backgroundColor': 'black' }}
       >
+        <Scoreboard />
         <Player playerRef={playerRef} />
         <Enemies
           playerRef={playerRef}

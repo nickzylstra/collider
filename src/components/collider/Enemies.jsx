@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import Enemy from './Enemy';
 
 
-const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
+const Enemies = ({ height, width, enemyCount, playerRef }) => {
   const enemiesContainer = useRef(null);
   const enemySize = 24;
 
@@ -36,7 +36,7 @@ const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
         } else if (enemy.classed('colliding')) {
           enemy.classed('colliding', false);
           enemy.classed('recentlyCollided', true);
-          setTimeout(() => enemy.classed('recentlyCollided', false), 500);
+          d3.timeout(() => enemy.classed('recentlyCollided', false), 500);
         }
       }
 
@@ -59,10 +59,10 @@ const Enemies = ({ height, width, enemyCount, playerRef, gameRef }) => {
         .transition(moveTrans)
         .tween('moveEnemy', moveEnemy);
       
-      timer = setTimeout(moveEnemies, 2000);
+      timer = d3.timeout(moveEnemies, 2000);
     }())
   
-    return () => { clearTimeout(timer); }
+    return () => { timer.stop(); }
   }, [height, width, playerRef]);
 
   return (
